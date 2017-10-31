@@ -34,12 +34,11 @@ Template.Profile_Page.helpers({
     const profile = Profiles.findDoc(FlowRouter.getParam('username'));
     const selectedInterests = profile.interests;
     return profile && _.map(Interests.findAll(),
-            function makeInterestObject(interest) {
-              return { label: interest.name, selected: _.contains(selectedInterests, interest.name) };
-            });
+        function makeInterestObject(interest) {
+          return { label: interest.name, selected: _.contains(selectedInterests, interest.name) };
+        });
   },
 });
-
 
 Template.Profile_Page.events({
   'submit .profile-data-form'(event, instance) {
@@ -47,6 +46,7 @@ Template.Profile_Page.events({
     const firstName = event.target.First.value;
     const lastName = event.target.Last.value;
     const title = event.target.Title.value;
+    const location = event.target.Location.value;
     const username = FlowRouter.getParam('username'); // schema requires username.
     const picture = event.target.Picture.value;
     const github = event.target.Github.value;
@@ -56,8 +56,11 @@ Template.Profile_Page.events({
     const selectedInterests = _.filter(event.target.Interests.selectedOptions, (option) => option.selected);
     const interests = _.map(selectedInterests, (option) => option.value);
 
-    const updatedProfileData = { firstName, lastName, title, picture, github, facebook, instagram, bio, interests,
-      username };
+    const updatedProfileData = {
+      firstName, lastName, title, location, picture,
+      github, facebook, instagram, bio, interests,
+      username,
+    };
 
     // Clear out any old validation errors.
     instance.context.reset();
